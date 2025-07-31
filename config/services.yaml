@@ -1,0 +1,17 @@
+parameters:
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+
+    App\Service\DbConnection:
+      arguments:
+        $host: '%env(MARIADB_HOST)%'
+        $port: '%env(int:MARIADB_PORT)%'
+        $database: '%env(MARIADB_DATABASE)%'
+        $username: '%env(MARIADB_USER)%'
+        $password: '%env(MARIADB_PASSWORD)%'

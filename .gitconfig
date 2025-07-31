@@ -1,0 +1,4 @@
+# used by www-data user in container
+
+[safe]
+    directory = /var/www
