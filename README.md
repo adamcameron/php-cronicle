@@ -1,5 +1,5 @@
-# php-cronicle
-Investigating Cronicle
+# symfony-scheduler
+Investigating Symfony Scheduler
 
 ## Notes
 
