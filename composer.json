@@ -1,6 +1,6 @@
 {
-    "name": "adamcameron/php-cronicle",
-    "description": "Investigating Cronicle",
+    "name": "adamcameron/symfony-scheduler",
+    "description": "Investigating Symfony Scheduler",
     "type": "project",
     "license": "LGPL-3.0-only",
     "minimum-stability": "stable",
