@@ -49,3 +49,29 @@ OK (10 tests, 25 assertions)
 
 Generating code coverage report in HTML format ... done [00:00.006]
 ```
+
+## Running the worker
+
+```bash
+docker exec php symfony run -d --watch=/tmp/symfony/schedule-last-updated.dat php bin/console messenger:consume
+```
+
+### Killing the worker
+
+```bash
+# find out its PID
+docker exec php symfony server:status
+Local Web Server
+    Not Running
+
+Workers
+    PID 2385: php bin/console messenger:consume (watching /tmp/symfony/schedule-last-updated.dat/)
+
+Environment Variables
+    None
+    
+# kill  it  
+docker exec php bash -c "kill 2385"
+```
+
+It's worth noting that that file path is specified as `SCHEDULE_RESTART_FILE` in the docker-compose.yml file.

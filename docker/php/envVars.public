@@ -3,3 +3,4 @@ APP_ENV=dev
 APP_LOG_DIR=/var/log/symfony
 COMPOSER_CACHE_DIR=/tmp/composer-cache
 PHPUNIT_CACHE_RESULT_FILE=0
+BANK_HOLIDAY_API_URL=https://www.gov.uk/bank-holidays.json

@@ -15,3 +15,11 @@ services:
         $database: '%env(MARIADB_DATABASE)%'
         $username: '%env(MARIADB_USER)%'
         $password: '%env(MARIADB_PASSWORD)%'
+
+    App\Service\BankHolidayServiceAdapter:
+      arguments:
+        $apiUrl: '%env(BANK_HOLIDAY_API_URL)%'
+
+    App\EventListener\TaskChangeListener:
+      arguments:
+        $restartFilePath: '%env(SCHEDULE_RESTART_FILE)%'

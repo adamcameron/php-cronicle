@@ -30,10 +30,15 @@ COPY usr/local/etc/php/conf.d/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ex
 RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | bash
 RUN ["apt-get", "install", "-y", "symfony-cli"]
 
-# need to use 777 as both php-fpm (www-data) and php-cli (root) will write to these directories
 RUN mkdir -p /var/cache/symfony && chown www-data:www-data /var/cache/symfony && chmod 777 /var/cache/symfony
 RUN mkdir -p /var/cache/symfony/dev && chown www-data:www-data /var/cache/symfony/dev && chmod 777 /var/cache/symfony/dev
 RUN mkdir -p /var/log/symfony && chown www-data:www-data /var/log/symfony && chmod 777 /var/log/symfony
+
+# Create scheduler restart file (used by symfony run --watch)
+ARG SCHEDULE_RESTART_FILE
+RUN mkdir -p $(dirname "$SCHEDULE_RESTART_FILE") && \
+    echo "$(date +%s)" > "$SCHEDULE_RESTART_FILE" && \
+    chmod 666 "$SCHEDULE_RESTART_FILE"
 
 HEALTHCHECK \
     --start-period=30s \

@@ -22,10 +22,17 @@ services:
     build:
       context: php
       dockerfile: Dockerfile
+      args:
+        # Must match SCHEDULE_RESTART_FILE environment variable below
+        SCHEDULE_RESTART_FILE: "/tmp/symfony/schedule-last-updated.dat"
 
     env_file:
       - mariadb/envVars.public
       - php/envVars.public
+
+    environment:
+      # Must match SCHEDULE_RESTART_FILE build arg above
+      SCHEDULE_RESTART_FILE: "/tmp/symfony/schedule-last-updated.dat"
 
     ports:
       - "9000:9000"
@@ -35,6 +42,8 @@ services:
 
     volumes:
       - ..:/var/www
+      - /var/log/symfony:/var/log/symfony
+      - /var/log/symfony:/var/log/symfony
 
     extra_hosts:
       - host.docker.internal:host-gateway
