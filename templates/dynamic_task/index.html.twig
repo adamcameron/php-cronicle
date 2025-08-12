@@ -14,15 +14,16 @@
                     <th>Type</th>
                     <th>Name</th>
                     <th>Schedule</th>
+                    <th>Working Days</th>
                     <th>Timezone</th>
                     <th>Priority</th>
                     <th>Active</th>
-                    <th>Scheduled At</th>
-                    <th>Last Executed</th>
+                    <th>Metadata</th>
+                    <th>Last Executed (UTC)</th>
                     <th>Execution Time (ms)</th>
                     <th>Last Result</th>
-                    <th>Metadata</th>
-                    <th>Actions</th>
+                    <th>Next Scheduled (UTC)</th>
+                    <th colspan="2">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -39,6 +40,13 @@
                         <code class="text-success">{{ task.schedule }}</code>
                     </td>
                     <td>
+                        {% if task.workingDaysOnly %}
+                            <span class="badge bg-warning text-dark">Yes</span>
+                        {% else %}
+                            <span class="text-muted">-</span>
+                        {% endif %}
+                    </td>
+                    <td>
                         <span class="badge bg-info">{{ task.timezone.value }}</span>
                     </td>
                     <td>
@@ -49,36 +57,6 @@
                             <span class="badge bg-success">Active</span>
                         {% else %}
                             <span class="badge bg-danger">Inactive</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if task.scheduledAt %}
-                            <small>{{ task.scheduledAt|date('Y-m-d H:i:s') }}</small>
-                        {% else %}
-                            <span class="text-muted">-</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if task.executedAt %}
-                            <small>{{ task.executedAt|date('Y-m-d H:i:s') }}</small>
-                        {% else %}
-                            <span class="text-muted">Never</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if task.executionTime %}
-                            <span class="text-info">{{ task.executionTime }}ms</span>
-                        {% else %}
-                            <span class="text-muted">-</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if task.lastResult %}
-                            <div class="result-preview" title="{{ task.lastResult }}">
-                                {{ task.lastResult|length > 50 ? task.lastResult|slice(0, 50) ~ '...' : task.lastResult }}
-                            </div>
-                        {% else %}
-                            <span class="text-muted">-</span>
                         {% endif %}
                     </td>
                     <td>
@@ -105,6 +83,45 @@
                             </div>
                         {% else %}
                             <span class="text-muted">No metadata</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if task.execution and task.execution.executedAt %}
+                            <small>{{ task.execution.executedAt|date('Y-m-d H:i:s') }}</small>
+                        {% else %}
+                            <span class="text-muted">Never</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if task.execution and task.execution.executionTime is not null %}
+                            <span class="text-info">{{ task.execution.executionTime }}ms</span>
+                        {% else %}
+                            <span class="text-muted">-</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if task.execution and task.execution.lastResult %}
+                            <div class="result-preview" title="{{ task.execution.lastResult }}">
+                                {{ task.execution.lastResult|length > 50 ? task.execution.lastResult|slice(0, 50) ~ '...' : task.execution.lastResult }}
+                            </div>
+                        {% else %}
+                            <span class="text-muted">-</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if task.execution and task.execution.nextScheduledAt %}
+                            <small>{{ task.execution.nextScheduledAt|date('Y-m-d H:i:s') }}</small>
+                        {% else %}
+                            <span class="text-muted">-</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if task.execution and task.execution.lastResult %}
+                            <div class="result-preview" title="{{ task.execution.lastResult }}">
+                                {{ task.execution.lastResult|length > 50 ? task.execution.lastResult|slice(0, 50) ~ '...' : task.execution.lastResult }}
+                            </div>
+                        {% else %}
+                            <span class="text-muted">-</span>
                         {% endif %}
                     </td>
                     <td>

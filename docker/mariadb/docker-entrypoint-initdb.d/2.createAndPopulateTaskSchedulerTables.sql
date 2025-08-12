@@ -1,3 +1,4 @@
+-- Create the main task configuration table
 CREATE TABLE dynamic_task_message (
     id INT AUTO_INCREMENT NOT NULL,
     type VARCHAR(255) NOT NULL,
@@ -7,14 +8,24 @@ CREATE TABLE dynamic_task_message (
     priority INT DEFAULT 50 NOT NULL,
     active TINYINT(1) DEFAULT 1 NOT NULL,
     working_days_only TINYINT(1) DEFAULT 0 NOT NULL,
-    scheduled_at DATETIME DEFAULT NULL,
-    executed_at DATETIME DEFAULT NULL,
-    execution_time INT DEFAULT NULL,
-    last_result LONGTEXT DEFAULT NULL,
     metadata JSON DEFAULT NULL,
     PRIMARY KEY(id)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;
 
+-- Create the task execution tracking table
+CREATE TABLE task_execution (
+    id INT AUTO_INCREMENT NOT NULL,
+    task_id INT NOT NULL,
+    next_scheduled_at DATETIME DEFAULT NULL,
+    executed_at DATETIME DEFAULT NULL,
+    execution_time INT DEFAULT NULL,
+    last_result LONGTEXT DEFAULT NULL,
+    PRIMARY KEY(id),
+    UNIQUE INDEX UNIQ_task_execution_task_id (task_id),
+    CONSTRAINT FK_task_execution_task_id FOREIGN KEY (task_id) REFERENCES dynamic_task_message (id) ON DELETE CASCADE
+) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;
+
+-- Insert task configurations (execution tracking records will be created automatically via cascade)
 INSERT INTO dynamic_task_message (type, name, schedule, timezone, priority, active, working_days_only, metadata) VALUES
 -- Basic Periodic Tasks
 ('system_health_check', 'System Health Monitor', '@daily', 'UTC', 10, 1, 0, '{"alertEmail":"ops@company.com","checkServices":["db","redis","api"]}'),
@@ -54,3 +65,8 @@ INSERT INTO dynamic_task_message (type, name, schedule, timezone, priority, acti
 -- High-Frequency Demo Tasks (for testing/demo purposes)
 ('send_emails', 'Send Pending Emails', '60 seconds', 'UTC', 80, 1, 0, '{"batchSize":50,"maxRetries":3,"provider":"smtp"}'),
 ('send_sms', 'Send Pending SMS Messages', '30 seconds', 'UTC', 85, 1, 0, '{"batchSize":25,"maxRetries":2,"provider":"twilio"}');
+
+-- Create corresponding task_execution records for all tasks
+-- This ensures each task has an execution tracking record from the start
+INSERT INTO task_execution (task_id)
+SELECT id FROM dynamic_task_message;

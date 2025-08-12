@@ -2,10 +2,14 @@
 
 namespace App\MessageHandler;
 
+use App\Entity\DynamicTaskMessage;
+
 class DataExportTaskHandler extends AbstractTaskHandler
 {
-    protected function handle(int $taskId, array $metadata): void
+    protected function handle(DynamicTaskMessage $task): string
     {
         // Task logic here - logging is handled by parent class
+
+        return 'success';
     }
 }

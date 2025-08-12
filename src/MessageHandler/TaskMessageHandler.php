@@ -3,6 +3,7 @@
 namespace App\MessageHandler;
 
 use App\Message\TaskMessage;
+use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -22,14 +23,16 @@ class TaskMessageHandler
 
     public function __invoke(TaskMessage $message): void
     {
-        if (!isset($this->handlerMap[$message->taskType])) {
-            throw new \InvalidArgumentException(
-                sprintf('No handler found for task type "%s"', $message->taskType)
+        $taskType = $message->getTaskType();
+        
+        if (!isset($this->handlerMap[$taskType])) {
+            throw new InvalidArgumentException(
+                sprintf('No handler found for task type "%s"', $taskType)
             );
         }
 
         /** @var AbstractTaskHandler $handler */
-        $handler = $this->handlerMap[$message->taskType];
-        $handler->execute($message->taskId, $message->metadata);
+        $handler = $this->handlerMap[$taskType];
+        $handler->execute($message->dynamicTask);
     }
 }

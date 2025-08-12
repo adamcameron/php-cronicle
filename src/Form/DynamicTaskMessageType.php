@@ -7,7 +7,6 @@ use App\Enum\TaskTimezone;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -50,6 +49,12 @@ class DynamicTaskMessageType extends AbstractType
                     new Assert\NotBlank()
                 ]
             ])
+            ->add('workingDaysOnly', CheckboxType::class, [
+                'required' => false,
+                'label' => 'Working Days Only',
+                'help' => 'Skip weekends and bank holidays',
+                'data' => $options['data']->isWorkingDaysOnly() ?? false
+            ])
             ->add('priority', IntegerType::class, [
                 'constraints' => [
                     new Assert\NotBlank(),
@@ -60,11 +65,6 @@ class DynamicTaskMessageType extends AbstractType
             ->add('active', CheckboxType::class, [
                 'required' => false,
                 'data' => $options['data']->isActive() ?? true
-            ])
-            ->add('scheduledAt', DateTimeType::class, [
-                'required' => false,
-                'widget' => 'single_text',
-                'input' => 'datetime_immutable'
             ])
             ->add('metadata', TextareaType::class, [
                 'required' => false,

@@ -4,8 +4,6 @@ namespace App\Entity;
 
 use App\Enum\TaskTimezone;
 use App\Repository\DynamicTaskMessageRepository;
-use DateTimeImmutable;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 
@@ -40,17 +38,8 @@ class DynamicTaskMessage implements JsonSerializable
     #[ORM\Column(nullable: false, options: ['default' => false])]
     private ?bool $workingDaysOnly = false;
 
-    #[ORM\Column(nullable: true)]
-    private ?DateTimeImmutable $scheduledAt = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?DateTimeImmutable $executedAt = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $executionTime = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $lastResult = null;
+    #[ORM\OneToOne(targetEntity: TaskExecution::class, mappedBy: 'task', cascade: ['persist', 'remove'])]
+    private ?TaskExecution $execution = null;
 
     #[ORM\Column(nullable: true)]
     private ?array $metadata = null;
@@ -132,50 +121,19 @@ class DynamicTaskMessage implements JsonSerializable
         return $this;
     }
 
-    public function getScheduledAt(): ?DateTimeImmutable
+    public function getExecution(): ?TaskExecution
     {
-        return $this->scheduledAt;
+        return $this->execution;
     }
 
-    public function setScheduledAt(?DateTimeImmutable $scheduledAt): static
+    public function setExecution(TaskExecution $execution): static
     {
-        $this->scheduledAt = $scheduledAt;
+        // Set the owning side of the relation if necessary
+        if ($execution->getTask() !== $this) {
+            $execution->setTask($this);
+        }
 
-        return $this;
-    }
-
-    public function getExecutedAt(): ?DateTimeImmutable
-    {
-        return $this->executedAt;
-    }
-
-    public function setExecutedAt(?DateTimeImmutable $executedAt): static
-    {
-        $this->executedAt = $executedAt;
-
-        return $this;
-    }
-
-    public function getExecutionTime(): ?int
-    {
-        return $this->executionTime;
-    }
-
-    public function setExecutionTime(?int $executionTime): static
-    {
-        $this->executionTime = $executionTime;
-
-        return $this;
-    }
-
-    public function getLastResult(): ?string
-    {
-        return $this->lastResult;
-    }
-
-    public function setLastResult(?string $lastResult): static
-    {
-        $this->lastResult = $lastResult;
+        $this->execution = $execution;
 
         return $this;
     }
@@ -204,7 +162,7 @@ class DynamicTaskMessage implements JsonSerializable
         return $this;
     }
 
-    public function jsonSerialize(): mixed
+    public function jsonSerialize(): array
     {
        return [
         'id' => $this->id,
@@ -215,10 +173,6 @@ class DynamicTaskMessage implements JsonSerializable
         'priority' => $this->priority,
         'active' => $this->active,
         'workingDaysOnly' => $this->workingDaysOnly,
-        'scheduledAt' => $this->scheduledAt?->format(DateTimeImmutable::ATOM),
-        'executedAt' => $this->executedAt?->format(DateTimeImmutable::ATOM),
-        'executionTime' => $this->executionTime,
-        'lastResult' => $this->lastResult,
         'metadata' => $this->metadata
        ];
     }

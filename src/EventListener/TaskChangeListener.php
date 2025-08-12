@@ -63,7 +63,6 @@ class TaskChangeListener
             mkdir($dir, 0755, true);
         }
         file_put_contents($this->restartFilePath, time());
-        $this->tasksLogger->debug('Created restart file', ['file' => $this->restartFilePath]);
     }
 
     private function triggerWorkerRestart(): void

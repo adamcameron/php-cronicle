@@ -42,7 +42,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-6">
                             <div class="mb-3">
                                 {{ form_label(form.schedule, 'Schedule', {'label_attr': {'class': 'form-label'}}) }}
                                 {{ form_widget(form.schedule, {'attr': {'class': 'form-control', 'placeholder': 'e.g. 0 9 * * 1-5 or @daily'}}) }}
@@ -50,12 +50,23 @@
                                 <div class="form-text">Cron expression or Symfony alias (@daily, @hourly, every 5 minutes, etc.)</div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="mb-3">
                                 {{ form_label(form.timezone, 'Timezone', {'label_attr': {'class': 'form-label'}}) }}
                                 {{ form_widget(form.timezone, {'attr': {'class': 'form-select'}}) }}
                                 {{ form_errors(form.timezone) }}
                                 <div class="form-text">Task execution timezone</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label">&nbsp;</label>
+                                <div class="form-check">
+                                    {{ form_widget(form.workingDaysOnly, {'attr': {'class': 'form-check-input'}}) }}
+                                    {{ form_label(form.workingDaysOnly, 'Working Days Only', {'label_attr': {'class': 'form-check-label'}}) }}
+                                </div>
+                                {{ form_errors(form.workingDaysOnly) }}
+                                <div class="form-text">Skip weekends and bank holidays</div>
                             </div>
                         </div>
                     </div>
@@ -80,14 +91,6 @@
                                 <div class="form-text">Inactive tasks won't be scheduled</div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                {{ form_label(form.scheduledAt, 'Next Run', {'label_attr': {'class': 'form-label'}}) }}
-                                {{ form_widget(form.scheduledAt, {'attr': {'class': 'form-control'}}) }}
-                                {{ form_errors(form.scheduledAt) }}
-                                <div class="form-text">When this task is next scheduled to run (optional)</div>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="mb-3">
@@ -96,40 +99,6 @@
                         {{ form_errors(form.metadata) }}
                         <div class="form-text">JSON configuration for the task (recipients, settings, etc.)</div>
                     </div>
-
-                    {% if task.id %}
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">Last Executed</label>
-                                <div class="form-control-plaintext">
-                                    {% if task.executedAt %}
-                                        <span class="text-info">{{ task.executedAt|date('Y-m-d H:i:s') }}</span>
-                                        {% if task.executionTime %}
-                                            <small class="text-muted">({{ task.executionTime }}ms)</small>
-                                        {% endif %}
-                                    {% else %}
-                                        <span class="text-muted">Never executed</span>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">Last Result</label>
-                                <div class="form-control-plaintext">
-                                    {% if task.lastResult %}
-                                        <div class="bg-light p-2 rounded small text-truncate" title="{{ task.lastResult }}">
-                                            {{ task.lastResult }}
-                                        </div>
-                                    {% else %}
-                                        <span class="text-muted">No result yet</span>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}
 
                     <div class="d-flex justify-content-between">
                         <div>

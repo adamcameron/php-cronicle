@@ -62,11 +62,7 @@ class DynamicScheduleProvider implements ScheduleProviderInterface
 
     private function createRecurringMessage(DynamicTaskMessage $task): RecurringMessage
     {
-        $taskMessage = new TaskMessage(
-            $task->getType(),
-            $task->getId(),
-            $task->getMetadata() ?? []
-        );
+        $taskMessage = new TaskMessage($task);
 
         $schedule = $this->scheduleTimezoneConverter->convertToUtc(
             $task->getSchedule(),
