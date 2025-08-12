@@ -197,3 +197,35 @@ docker exec php tail -f var/log/tasks.log
 - **Trigger decoration pattern** for working days (not `RecurringMessage` decoration)
 
 **The system evolved from a basic task scheduler to a comprehensive task management and monitoring platform with real-time execution tracking, advanced scheduling features, and complete user visibility.**
+
+## 📝 NEXT: BLOG ARTICLE - "The Execution Tracking Saga"
+
+**Status**: Ready to write! System is complete and production-ready.
+
+**Article Focus**: The debugging journey from basic scheduling to comprehensive execution tracking, featuring:
+
+### Epic Debugging Moments
+1. **The Doctrine Persist Comedy** - Missing `persist()` calls, worked once then mysteriously stopped
+2. **The Timezone Configuration Tragedy** - Developer manually configured `date.timezone = Europe/London` then spent hours debugging why UTC scheduling didn't work
+3. **The "Math Checks Out" Moment** - Looking at hourly tasks running every 2 minutes and thinking "well 20:28 minus 20:26 equals 2 minutes, so clearly this is fine!"
+4. **The Entity Detachment Drama** - Message queue serialization breaking Doctrine managed state
+5. **The Working Days Self-Sabotage** - Creating fake bank holiday for testing, then wondering why working-days-only tasks won't run
+6. **The "AND THIS DID NOT FOOL ME THIS TIME"** - Character development! Learning to distrust the silence
+
+### Technical Content
+- Entity relationship design and separation of concerns
+- Symfony scheduler limitations and creative workarounds
+- Doctrine gotchas: persist(), relationships, message queue detachment
+- Template Method pattern for execution tracking
+- Timezone handling best practices (what NOT to do)
+- Real-world debugging psychology and developer evolution
+
+### Writing Tone
+- Conversational and humorous while maintaining technical depth
+- Self-deprecating about developer mistakes (with permission to roast)
+- Educational value hidden in comedy
+- "Things That Will Make You Question Your Life Choices" section
+
+**Key Quote for Article**: "Sometimes the real enemy is the developer in the mirror."
+
+**Developer's Request**: "Oh you def have to stitch me up when you write it." - Full permission to roast the timezone configuration saga and other debugging comedy.
