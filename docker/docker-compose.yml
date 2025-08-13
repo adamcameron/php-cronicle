@@ -77,6 +77,14 @@ services:
       MARIADB_PASSWORD_FILE: /run/secrets/mariadb_password
       MARIADB_ROOT_PASSWORD_FILE: /run/secrets/mariadb_root_password
 
+  mail:
+    image: reachfive/fake-smtp-server
+    ports:
+      - "1080:1080"
+      - "25:25"
+    command: ["node", "index.js", "--smtp-port", "25"]
+    restart: unless-stopped
+
 volumes:
   mariadb-data:
 

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>SMS Task Notification</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .header { background-color: #f8f9fa; padding: 15px; border-radius: 5px; }
+        .content { margin: 20px 0; }
+        .task-details { background-color: #e9ecef; padding: 10px; border-radius: 3px; }
+        .success { color: #28a745; font-weight: bold; }
+        .metadata { font-size: 0.9em; color: #6c757d; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>SMS Task Execution Report</h1>
+        <p class="success">✓ Task completed successfully</p>
+    </div>
+    
+    <div class="content">
+        <p>The scheduled SMS task "<strong>{{ task.name }}</strong>" has been executed.</p>
+        
+        <div class="task-details">
+            <h3>Task Details</h3>
+            <ul>
+                <li><strong>Task ID:</strong> {{ task.id }}</li>
+                <li><strong>Task Type:</strong> {{ task.type }}</li>
+                <li><strong>Schedule:</strong> {{ task.schedule }}</li>
+                <li><strong>Executed At:</strong> {{ executed_at|date('Y-m-d H:i:s') }}</li>
+                {% if task.metadata %}
+                <li><strong>Configuration:</strong>
+                    <div class="metadata">
+                        {% for key, value in task.metadata %}
+                            <br>&nbsp;&nbsp;{{ key }}: {{ value }}
+                        {% endfor %}
+                    </div>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+        
+        <p>This is an automated notification from the Symfony Scheduler system.</p>
+    </div>
+</body>
+</html>

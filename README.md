@@ -19,6 +19,7 @@ and the root user used to create the DB, respectively.
 APP_SECRET=[any value really]
 MARIADB_PASSWORD=[same as the value in mariadb_password_file.private]
 DATABASE_URL=[using same MARIADB values from other settings]
+MAILER_DSN=[SMTP connection string for fake-smtp-server]
 ```
 
 ## Building for dev
@@ -48,6 +49,21 @@ Time: 00:02.270, Memory: 28.00 MB
 OK (10 tests, 25 assertions)
 
 Generating code coverage report in HTML format ... done [00:00.006]
+```
+
+## SMTP Server
+
+The development environment includes a fake SMTP server for testing email functionality:
+
+* **Web UI**: http://localhost:1080 - View captured emails
+* **API**: http://localhost:1080/api/emails - Programmatic access for integration tests
+* **SMTP**: localhost:25 - Where applications send emails
+
+The fake SMTP server captures all outgoing emails instead of actually sending them, making it perfect for development and testing.
+
+To delete all emails:
+```bash
+curl -X DELETE http://localhost:1080/api/emails
 ```
 
 ## Running the worker

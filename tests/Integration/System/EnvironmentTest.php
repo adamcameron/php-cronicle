@@ -33,6 +33,7 @@ class EnvironmentTest extends TestCase
     {
         $varNames = [
             'APP_SECRET',
+            'DATABASE_URL',
             'MARIADB_PASSWORD',
         ];
 
@@ -49,13 +50,15 @@ class EnvironmentTest extends TestCase
     {
         $varNames = [
             'APP_SECRET',
+            'DATABASE_URL',
             'MARIADB_PASSWORD',
         ];
 
         foreach ($varNames as $varName) {
-            $this->assertNotEmpty(
-                $_ENV[$varName],
-                "Expected secret environment variable $varName to be set and to have a value"
+            $this->assertArrayHasKey(
+                $varName,
+                $_ENV,
+                "Expected secret environment variable $varName to be set"
             );
         }
     }

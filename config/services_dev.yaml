@@ -1,0 +1,18 @@
+services:
+
+    Symfony\Contracts\HttpClient\HttpClientInterface:
+        class: Symfony\Component\HttpClient\HttpClient
+        factory: ['Symfony\Component\HttpClient\HttpClient', 'create']
+
+    App\Service\BankHolidayServiceAdapter:
+        arguments:
+            $httpClient: '@Symfony\Contracts\HttpClient\HttpClientInterface'
+            $apiUrl: '%env(BANK_HOLIDAY_API_URL)%'
+
+    testing.BankHolidayServiceAdapter:
+        alias: 'App\Service\BankHolidayServiceAdapter'
+        public: true
+
+    testing.MailerInterface:
+        alias: 'Symfony\Component\Mailer\MailerInterface'
+        public: true
