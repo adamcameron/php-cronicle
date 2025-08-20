@@ -8,6 +8,7 @@ use Psr\Log\LoggerInterface;
 use App\Service\ScheduleFormatDetector;
 use App\Service\ScheduleTimezoneConverter;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Mime\Email;
 
 class SendEmailsTaskHandler extends AbstractTaskHandler
@@ -17,9 +18,10 @@ class SendEmailsTaskHandler extends AbstractTaskHandler
         EntityManagerInterface $entityManager,
         ScheduleFormatDetector $scheduleFormatDetector,
         ScheduleTimezoneConverter $scheduleTimezoneConverter,
+        MessageBusInterface $bus,
         private readonly MailerInterface $mailer
     ) {
-        parent::__construct($tasksLogger, $entityManager, $scheduleFormatDetector, $scheduleTimezoneConverter);
+        parent::__construct($tasksLogger, $entityManager, $scheduleFormatDetector, $scheduleTimezoneConverter, $bus);
     }
 
     protected function handle(DynamicTaskMessage $task): string

@@ -42,7 +42,7 @@ services:
 
     volumes:
       - ..:/var/www
-      - /var/log/symfony:/var/log/symfony
+      - /var/log/symfony/symfony-scheduler:/var/log/symfony
 
     extra_hosts:
       - host.docker.internal:host-gateway

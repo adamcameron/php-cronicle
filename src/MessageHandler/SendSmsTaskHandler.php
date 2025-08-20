@@ -10,6 +10,7 @@ use App\Service\ScheduleTimezoneConverter;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use DateTimeImmutable;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class SendSmsTaskHandler extends AbstractTaskHandler
 {
@@ -18,13 +19,15 @@ class SendSmsTaskHandler extends AbstractTaskHandler
         EntityManagerInterface $entityManager,
         ScheduleFormatDetector $scheduleFormatDetector,
         ScheduleTimezoneConverter $scheduleTimezoneConverter,
+        MessageBusInterface $bus,
         private readonly MailerInterface $mailer
     ) {
-        parent::__construct($tasksLogger, $entityManager, $scheduleFormatDetector, $scheduleTimezoneConverter);
+        parent::__construct($tasksLogger, $entityManager, $scheduleFormatDetector, $scheduleTimezoneConverter, $bus);
     }
 
     protected function handle(DynamicTaskMessage $task): string
     {
+        throw new \Exception("oooopsy");
         $email = new TemplatedEmail()
             ->from($_ENV['EMAIL_NO_REPLY'])
             ->to($_ENV['EMAIL_DEV_TEAM'])

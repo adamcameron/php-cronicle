@@ -8,7 +8,7 @@ monolog:
             type: stream
             path: "%kernel.logs_dir%/%kernel.environment%.log"
             level: debug
-            channels: ["!event"]
+            channels: ["!event", "!doctrine", "!console", "!deprecation", "!cache", "!request", "!mailer", "!tasks", "!messenger"]
         tasks:
             type: stream
             path: "%kernel.logs_dir%/tasks.log"
@@ -17,7 +17,7 @@ monolog:
         console:
             type: console
             process_psr_3_messages: false
-            channels: ["!event", "!doctrine", "!console", "!tasks"]
+            channels: ["!event", "!doctrine", "!console", "!deprecation", "!cache", "!request", "!mailer", "!tasks", "!messenger"]
         error_email:
             type: symfony_mailer
             from_email: '%env(EMAIL_NO_REPLY)%'

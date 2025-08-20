@@ -23,6 +23,7 @@
                     <th>Execution Time (ms)</th>
                     <th>Last Result</th>
                     <th>Next Scheduled (UTC)</th>
+                    <th>Failure Count</th>
                     <th colspan="2">Actions</th>
                 </tr>
             </thead>
@@ -111,6 +112,15 @@
                     <td>
                         {% if task.execution and task.execution.nextScheduledAt %}
                             <small>{{ task.execution.nextScheduledAt|date('Y-m-d H:i:s') }}</small>
+                        {% else %}
+                            <span class="text-muted">-</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if task.execution and task.execution.failureCount %}
+                            <div class="result-preview" title="{{ task.execution.failureCount }}">
+                                {{ task.execution.failureCount }}
+                            </div>
                         {% else %}
                             <span class="text-muted">-</span>
                         {% endif %}

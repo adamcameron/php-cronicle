@@ -20,6 +20,7 @@ CREATE TABLE task_execution (
     executed_at DATETIME DEFAULT NULL,
     execution_time INT DEFAULT NULL,
     last_result LONGTEXT DEFAULT NULL,
+    failure_count int DEFAULT 0 NOT NULL,
     PRIMARY KEY(id),
     UNIQUE INDEX UNIQ_task_execution_task_id (task_id),
     CONSTRAINT FK_task_execution_task_id FOREIGN KEY (task_id) REFERENCES dynamic_task_message (id) ON DELETE CASCADE
